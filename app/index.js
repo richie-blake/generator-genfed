@@ -50,6 +50,12 @@ module.exports = generators.Base.extend({
                     name: 'analyticsId',
                     message: 'Do you know what the Google Analytics ID is?',
                     default: ''
+                },
+                {
+                    type: 'input',
+                    name: 'developmentUrl',
+                    message: 'What is your development url? e.g. mysite.dev',
+                    default: ''
                 }
             ];
 
@@ -57,10 +63,11 @@ module.exports = generators.Base.extend({
         this.prompt(prompts, function(answers) {
 
             this.webRoot = this._checkTrailingSlash(answers.webRoot);
-            this.baseAssetPath = this._checkTrailingSlash(answers.baseAssetPath);
+            this.baseAssetPath = this.webRoot + this._checkTrailingSlash(answers.baseAssetPath);
 
             this.siteName = answers.siteName;
             this.analyticsId = answers.analyticsId;
+            this.developmentUrl = answers.developmentUrl;
 
             complete();
 
@@ -103,7 +110,8 @@ module.exports = generators.Base.extend({
             {
                 baseAssetPath: this.baseAssetPath,
                 sassPath: this.pathSass,
-                jsPath: this.pathJs
+                jsPath: this.pathJs,
+                developmentUrl: this.developmentUrl
             }
         );
 
@@ -144,6 +152,7 @@ module.exports = generators.Base.extend({
     makeDirectories: function() {
 
         mkdirp(this.destinationPath(this.pathFrontEnd));
+        mkdirp(this.destinationPath(this.pathSass + 'lib/'));
         mkdirp(this.destinationPath(this.pathSass + 'modules/'));
         mkdirp(this.destinationPath(this.pathJs));
         mkdirp(this.destinationPath(this.pathJs + 'lib'));
@@ -169,7 +178,8 @@ module.exports = generators.Base.extend({
             'glob',
             'path',
             'vinyl-source-stream',
-            'grunt-grunticon-pigment'
+            'grunt-grunticon-pigment',
+            'browser-sync'
         ], {
             'saveDev': true
         });

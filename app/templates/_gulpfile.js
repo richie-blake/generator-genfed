@@ -8,20 +8,29 @@ var gulp = require('gulp'),
     _ = require('underscore'),
     path = require('path'),
     source = require('vinyl-source-stream'),
-    grunt = require('gulp-grunt')(gulp);
+    grunt = require('gulp-grunt')(gulp),
+    browserSync = require('browser-sync').create();
 
 gulp.task('css', function() {
     return sass('<%= sassPath %>', {style: 'expanded'})
         .pipe(autoprefixer('last 2 version', 'ie 8', 'ie 9'))
         .pipe(gulp.dest('<%= baseAssetPath %>css'))
+        .pipe(browserSync.stream())
         .pipe(rename({suffix: '.min'}))
         .pipe(minifycss())
-        .pipe(gulp.dest('<%= baseAssetPath %>css'));
+        .pipe(gulp.dest('<%= baseAssetPath %>css'))
+        .pipe(browserSync.stream());
 });
 
 
 gulp.task('icon', function() {
     gulp.run('grunt-icon');
+});
+
+gulp.task('browser-sync', function() {
+    browserSync.init({
+        proxy: "<%= developmentUrl %>"
+    });
 });
 
 gulp.task('browserify', function(done) {
@@ -52,7 +61,7 @@ gulp.task('browserify', function(done) {
 
 gulp.task('js', ['browserify'], function() {});
 
-gulp.task('watch', function() {
+gulp.task('watch', ['browser-sync'], function() {
     gulp.watch('<%= sassPath %>*.scss', ['css']);
     gulp.watch('<%= jsPath %>*.js', ['js']);
 });
