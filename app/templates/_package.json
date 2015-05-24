@@ -1,0 +1,11 @@
+{
+    "name": "<%= siteName %>",
+    "version": "1.0.0",
+    "description": "<%= siteName %>",
+    "main": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "MIT"
+}
