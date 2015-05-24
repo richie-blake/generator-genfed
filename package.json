@@ -1,5 +1,5 @@
 {
-  "name": "generator-genfed",
+  "name": "generator-rblake-genfed",
   "version": "1.0.0",
   "description": "Yeoman generator for scaffolding a front end",
   "main": "app/index.js",
@@ -19,5 +19,6 @@
   },
   "devDependencies": {
     "mkdirp": "^0.5.1"
-  }
+  },
+  "repository": "https://github.com/richie-blake/generator-genfed"
 }
