@@ -19,5 +19,10 @@ Initial build
 gulp build
 ```
 
+Watching - will start browser-sync and keep an eye on css,js, and html changes.
+```
+gulp watch
+```
+
 
 

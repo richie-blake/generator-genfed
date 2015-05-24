@@ -111,7 +111,8 @@ module.exports = generators.Base.extend({
                 baseAssetPath: this.baseAssetPath,
                 sassPath: this.pathSass,
                 jsPath: this.pathJs,
-                developmentUrl: this.developmentUrl
+                developmentUrl: this.developmentUrl,
+                webRootPath: this.webRoot
             }
         );
 

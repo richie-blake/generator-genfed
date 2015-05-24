@@ -64,6 +64,8 @@ gulp.task('js', ['browserify'], function() {});
 gulp.task('watch', ['browser-sync'], function() {
     gulp.watch('<%= sassPath %>*.scss', ['css']);
     gulp.watch('<%= jsPath %>*.js', ['js']);
+    gulp.watch("<%= webRootPath %>*.html").on('change', browserSync.reload);
+
 });
 
 gulp.task('build', ['js', 'css', 'icon'], function(done) {
