@@ -15,9 +15,7 @@
   "author": "Richard Blake",
   "license": "MIT",
   "dependencies": {
-    "yeoman-generator": "^0.20.1"
-  },
-  "devDependencies": {
+    "yeoman-generator": "^0.20.1",
     "mkdirp": "^0.5.1"
   },
   "repository": "https://github.com/richie-blake/generator-genfed"
