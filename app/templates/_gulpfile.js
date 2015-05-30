@@ -8,8 +8,9 @@ var gulp = require('gulp'),
     _ = require('underscore'),
     path = require('path'),
     source = require('vinyl-source-stream'),
-    grunt = require('gulp-grunt')(gulp),
     browserSync = require('browser-sync').create();
+
+require('gulp-grunt')(gulp);
 
 gulp.task('css', function() {
     return sass('<%= sassPath %>', {style: 'expanded'})

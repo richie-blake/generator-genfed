@@ -1,5 +1,6 @@
 var mkdirp = require('mkdirp');
 var generators = require('yeoman-generator');
+var slug = require('slug');
 
 module.exports = generators.Base.extend({
 
@@ -9,6 +10,9 @@ module.exports = generators.Base.extend({
         generators.Base.apply(this, arguments);
 
         // Any custom code here.
+        this.option('silverstripe');
+
+        this.isSilverStripe = (this.options.silverstripe ? true : false);
 
     },
 
@@ -69,9 +73,29 @@ module.exports = generators.Base.extend({
             this.analyticsId = answers.analyticsId;
             this.developmentUrl = answers.developmentUrl;
 
+            this.slug = slug(this.siteName.toLowerCase());
+
+            this.silverStripeThemePath = this.webRoot + 'themes/' + this.slug + '/';
+
+
             complete();
 
         }.bind(this));
+
+    },
+
+    checkSilverStripe : function() {
+
+        var self = this;
+
+        if (this.isSilverStripe) {
+            var composer = this.spawnCommand('composer', ['create-project', 'silverstripe/installer', './' + this.webRoot]);
+            composer.on('close', function(code) {
+                self._runCopyOperations();
+            });
+        } else {
+            self._runCopyOperations();
+        }
 
     },
 
@@ -85,14 +109,40 @@ module.exports = generators.Base.extend({
 
     },
 
-    copyFiles: function() {
+    _runCopyOperations: function() {
+
+        this._copyFiles();
+        this._makeDirectories();
+        this._cleanup();
+        this._installDependencies();
+
+    },
+
+    _copyFiles: function() {
+
+        var baseTemplatePath = this.webRoot + 'index.html';
+
+        if (this.isSilverStripe) {
+
+            this.fs.copyTpl(
+                this.templatePath('silverstripe-config.yml'),
+                this.destinationPath(this.webRoot + 'mysite/_config/config.yml'),
+                {
+                    siteName: this.slug
+                }
+            );
+
+            baseTemplatePath = this.silverStripeThemePath + 'templates/Page.ss';
+
+        }
 
         this.fs.copyTpl(
             this.templatePath('index.html'),
-            this.destinationPath(this.webRoot + 'index.html'),
+            this.destinationPath(baseTemplatePath),
             {
-                siteName: this.siteName,
-                analyticsId: this.analyticsId
+                analyticsId: this.analyticsId,
+                isSilverStripe: this.isSilverStripe,
+                siteName: this.siteName
             }
         );
 
@@ -100,7 +150,7 @@ module.exports = generators.Base.extend({
             this.templatePath('_package.json'),
             this.destinationPath('package.json'),
             {
-                siteName: this.siteName.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '')
+                siteName: this.slug
             }
         );
 
@@ -145,12 +195,15 @@ module.exports = generators.Base.extend({
 
         this.fs.copyTpl(
             this.templatePath('_README.md'),
-            this.destinationPath('README.md')
+            this.destinationPath('README.md'),
+            {
+                siteName: this.siteName
+            }
         );
 
     },
 
-    makeDirectories: function() {
+    _makeDirectories: function() {
 
         mkdirp(this.destinationPath(this.pathFrontEnd));
         mkdirp(this.destinationPath(this.pathSass + 'lib/'));
@@ -162,9 +215,28 @@ module.exports = generators.Base.extend({
         mkdirp(this.destinationPath(this.baseAssetPath + 'images/'));
         mkdirp(this.destinationPath(this.baseAssetPath + 'js/'));
 
+        if (this.isSilverStripe) {
+            mkdirp(this.destinationPath(this.silverStripeThemePath + 'templates/Layout/'));
+            mkdirp(this.destinationPath(this.silverStripeThemePath + 'templates/Includes/'));
+            mkdirp(this.destinationPath(this.silverStripeThemePath + 'css/'));
+        }
+
     },
 
-    installDependencies: function() {
+    _cleanup: function() {
+
+
+        if (this.isSilverStripe) {
+
+            this.fs.delete(this.webRoot + 'web.config');
+            this.fs.delete(this.webRoot + 'install-frameworkmissing.html');
+            this.fs.delete(this.webRoot + 'framework/web.config');
+
+        }
+
+    },
+
+    _installDependencies: function() {
         this.npmInstall([
             'gulp',
             'gulp-grunt',
@@ -185,7 +257,6 @@ module.exports = generators.Base.extend({
             'saveDev': true
         });
     }
-
 
 });
 

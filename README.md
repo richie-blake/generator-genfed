@@ -4,14 +4,14 @@ Yeoman front end generator
 # Install
 
 ```
-npm install -g yo generator-rblake-genfed
+npm install -g yo generator-eo-frontend
 ```
 
 # Usage
 
 Run the generator:
 ```
-yo rblake-genfed
+yo eo-frontend
 ```
 
 Initial build
