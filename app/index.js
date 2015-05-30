@@ -172,6 +172,21 @@ module.exports = generators.Base.extend({
         );
 
         this.fs.copyTpl(
+            this.templatePath('_mixins.scss'),
+            this.destinationPath(this.pathSass + '_mixins.scss')
+        );
+
+        this.fs.copyTpl(
+            this.templatePath('_functions.scss'),
+            this.destinationPath(this.pathSass + '_functions.scss')
+        );
+
+        this.fs.copyTpl(
+            this.templatePath('_breakpoints.scss'),
+            this.destinationPath(this.pathSass + '_breakpoints.scss')
+        );
+
+        this.fs.copyTpl(
             this.templatePath('site.js'),
             this.destinationPath(this.pathJs + 'site.js')
         );

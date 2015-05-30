@@ -1,0 +1,25 @@
+/*
+VARIABLES
+*/
+// Fonts
+$font-stack-body: 'Georgia', 'Times', 'Times New Roman', 'serif';
+$font-size-base: 16px;
+
+// Colours
+
+
+/*
+IMPORTS
+*/
+@import 'functions';
+@import 'mixins';
+@import 'breakpoints';
+
+
+
+/*
+ELEMENTS
+*/
+*, *:before, *:after {
+  box-sizing: border-box;
+}

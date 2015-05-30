@@ -1,0 +1,11 @@
+/*
+Pixel to rems
+
+Usage:
+  h1 {
+    font-size: rem(14);
+  }
+*/
+@function rem($pxval) {
+  @return #{$pxval / 16}rem;
+}
