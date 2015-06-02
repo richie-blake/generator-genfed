@@ -276,6 +276,7 @@ module.exports = generators.Base.extend({
             'glob',
             'path',
             'vinyl-source-stream',
+            'vinyl-buffer',
             'grunt-grunticon',
             'browser-sync',
             'gulp-uglify'
