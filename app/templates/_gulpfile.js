@@ -10,7 +10,8 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream'),
     browserSync = require('browser-sync').create(),
     uglify = require('gulp-uglify'),
-    buffer = require('vinyl-buffer');
+    buffer = require('vinyl-buffer'),
+    jshint = require('gulp-jshint');
 
 require('gulp-grunt')(gulp);
 
@@ -44,6 +45,8 @@ gulp.task('browserify', function(done) {
 
             bundle.pipe(source(localName))
                     .pipe(buffer())
+                    .pipe(jshint())
+                    .pipe(jshint.reporter('default'))
                     .pipe(uglify())
                     .pipe(gulp.dest(path.join('<%= baseAssetPath %>', "js")))
                     .on('end', function() {

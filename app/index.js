@@ -155,6 +155,11 @@ module.exports = generators.Base.extend({
         );
 
         this.fs.copyTpl(
+            this.templatePath('_.jshintrc'),
+            this.destinationPath('.jshintrc')
+        );
+
+        this.fs.copyTpl(
             this.templatePath('_gulpfile.js'),
             this.destinationPath('gulpfile.js'),
             {
@@ -279,7 +284,8 @@ module.exports = generators.Base.extend({
             'vinyl-buffer',
             'grunt-grunticon',
             'browser-sync',
-            'gulp-uglify'
+            'gulp-uglify',
+            'gulp-jshint'
         ], {
             'saveDev': true
         });
