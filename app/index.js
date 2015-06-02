@@ -216,6 +216,16 @@ module.exports = generators.Base.extend({
             }
         );
 
+        this.fs.copyTpl(
+            this.templatePath('robots.txt'),
+            this.destinationPath(this.webRoot + 'robots.txt')
+        );
+
+        this.fs.copyTpl(
+            this.templatePath('humans.txt'),
+            this.destinationPath(this.webRoot + 'humans.txt')
+        );
+
     },
 
     _makeDirectories: function() {
@@ -266,8 +276,9 @@ module.exports = generators.Base.extend({
             'glob',
             'path',
             'vinyl-source-stream',
-            'grunt-grunticon-pigment',
-            'browser-sync'
+            'grunt-grunticon',
+            'browser-sync',
+            'gulp-uglify'
         ], {
             'saveDev': true
         });

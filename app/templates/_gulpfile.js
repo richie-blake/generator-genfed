@@ -8,16 +8,14 @@ var gulp = require('gulp'),
     _ = require('underscore'),
     path = require('path'),
     source = require('vinyl-source-stream'),
-    browserSync = require('browser-sync').create();
+    browserSync = require('browser-sync').create(),
+    uglify = require('gulp-uglify');
 
 require('gulp-grunt')(gulp);
 
 gulp.task('css', function() {
     return sass('<%= sassPath %>', {style: 'expanded'})
         .pipe(autoprefixer('last 2 version', 'ie 8', 'ie 9'))
-        .pipe(gulp.dest('<%= baseAssetPath %>css'))
-        .pipe(browserSync.stream())
-        .pipe(rename({suffix: '.min'}))
         .pipe(minifycss())
         .pipe(gulp.dest('<%= baseAssetPath %>css'))
         .pipe(browserSync.stream());
@@ -44,6 +42,7 @@ gulp.task('browserify', function(done) {
                 bundle = browserify([ './' + src]).bundle();
 
             bundle.pipe(source(localName))
+                    .pipe(uglify())
                     .pipe(gulp.dest(path.join('<%= baseAssetPath %>', "js")))
                     .on('end', function() {
                         done();
@@ -63,10 +62,10 @@ gulp.task('browserify', function(done) {
 gulp.task('js', ['browserify'], function() {});
 
 gulp.task('watch', ['browser-sync'], function() {
-    gulp.watch('<%= sassPath %>*.scss', ['css']);
-    gulp.watch('<%= jsPath %>*.js', ['js']);
-    gulp.watch("<%= webRootPath %>*.html").on('change', browserSync.reload);
-
+    gulp.watch('<%= sassPath %>**/*.scss', ['css']);
+    gulp.watch('<%= jsPath %>**/*.js', ['js']);
+    gulp.watch('<%= webRootPath %>**/*.html').on('change', browserSync.reload);
+    gulp.watch('<%= webRootPath %>**/*.ss').on('change', browserSync.reload);
 });
 
 gulp.task('build', ['js', 'css', 'icon'], function(done) {

@@ -8,28 +8,15 @@ module.exports = function(grunt) {
 
         pkg: pkg,
 
-        clean: {
-            pngicons: "<%= baseAssetPath %>css/png",
-            build: "build"
-        },
-
-        grunticon_pigment: {
+        grunticon: {
             app: {
                 files: [{
+                    expand: true,
                     cwd: '<%= svgPath %>',
-                    dest: '<%= baseAssetPath %>css'
+                    dest: '<%= baseAssetPath %>icons/',
+                    src: ['*.svg', '*.png']
                 }],
                 options: {
-                    svgFolder: "./",
-                    svgColorFolder: "colourise",
-                    defaultWidth: "32px",
-                    defaultHeight: "32px",
-                    tmpDir: "build",
-                    previewTemplate: "<%= svgPath %>template/preview.html",
-                    svgColors: [
-                    ],
-                    customselectors: {
-                    }
                 }
             }
         }
@@ -47,9 +34,7 @@ module.exports = function(grunt) {
 
 
     grunt.registerTask("icon", [
-        "clean:pngicons",
-        "grunticon_pigment:app",
-        "clean:build"
+        "grunticon:app",
     ]);
 
 };
